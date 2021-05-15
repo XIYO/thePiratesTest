@@ -13,20 +13,16 @@
 
 ## 0. 테스트 데이터 추가
 
-API : /test
-
-METHOD : GET
-
-RETURN : VOID
+- API : /test
+- METHOD : GET
+- RETURN : VOID
 
 테스트 데이터를 추가합니다. 
 
 ## A. 점포 추가
 
 API : /addstore
-
 METHOD : POST
-
 RETURN : VOID
 
 설명 : 이 부분은 과제에서 주는 JSON을 다르게 수정했습니다.
@@ -71,9 +67,7 @@ RETURN : VOID
 ## C. 점포 목록 조회
 
 API : /simpleget
-
 METHOD : GET
-
 RETURN : LIST<SimpleStoreVo>
 
 설명 : 조회한 날짜를 기준으로 모든 점포의 정보를 간단하게 출력합니다.
@@ -81,9 +75,7 @@ RETURN : LIST<SimpleStoreVo>
 ## D. 점포 상세 조회
 
 API : /storeget?id=?
-
 METHOD : GET
-
 RETURN : LIST<StoreVo>
 
 설명 : id와 조회한 날짜를 기준 앞으로 3일간의 점포의 영업일을 출력합니다.
@@ -91,9 +83,7 @@ RETURN : LIST<StoreVo>
 ## E. 점포 삭제
 
 API : /delete?id=?
-
 METHOD : DELETE
-
 RETURN : VOID
 
 설명 : id를 기준으로 점포 정보를 삭제 합니다.
