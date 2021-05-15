@@ -112,30 +112,34 @@ public record Controller(StoreRepository storeRepository,
     // 조회 일자 기준 영업시간 3일치의 의미는 오늘 날짜 이후로 3일 이후의 데이터
     @GetMapping(value = "/storeget")
     public StoreVo findById(long id) {
-        String day = LocalDateTime.now().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
-        LocalDate currentDate = LocalDate.now();
-        LocalDate lastDate = LocalDate.now().plusDays(3);
+        if (storeRepository.findById(id).orElse(null) != null) {
+            String day = LocalDateTime.now().getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+            LocalDate currentDate = LocalDate.now();
+            LocalDate lastDate = LocalDate.now().plusDays(3);
 
-        Store store = storeRepository.findById(id).orElse(null);
+            Store store = storeRepository.findById(id).orElse(null);
 
-        List<BusinessTimes> businessTimesList = businessTimesRepository.findAllByStoreAndDateGreaterThanEqualAndDateIsLessThan(store, currentDate, lastDate);
-        List<Holiday> holidayList = holiDayRepository.findAllByStoreAndHolidayGreaterThanEqualAndHolidayLessThan(store, currentDate, lastDate);
+            List<BusinessTimes> businessTimesList = businessTimesRepository.findAllByStoreAndDateGreaterThanEqualAndDateIsLessThan(store, currentDate, lastDate);
+            List<Holiday> holidayList = holiDayRepository.findAllByStoreAndHolidayGreaterThanEqualAndHolidayLessThan(store, currentDate, lastDate);
 
-        List<BusinessTimesDto> businessTimesDtoList = new ArrayList<>();
-        for (BusinessTimes businessTimes : businessTimesList) {
-            BusinessTimesDto businessTimesDto = new BusinessTimesDto(businessTimes, holidayList);
-            businessTimesDtoList.add(businessTimesDto);
+            List<BusinessTimesDto> businessTimesDtoList = new ArrayList<>();
+            for (BusinessTimes businessTimes : businessTimesList) {
+                BusinessTimesDto businessTimesDto = new BusinessTimesDto(businessTimes, holidayList);
+                businessTimesDtoList.add(businessTimesDto);
+            }
+
+            StoreVo storeVo = new StoreVo(store, businessTimesDtoList);
+
+            return storeVo;
         }
-
-        StoreVo storeVo = new StoreVo(store, businessTimesDtoList);
-
-        return storeVo;
+        return null;
     }
 
     // C 점포 삭제
     @DeleteMapping(value = "/delete")
     public void delete(long id) {
-        storeRepository.deleteById(id);
+        if (storeRepository.findById(id).orElse(null) != null)
+            storeRepository.deleteById(id);
     }
 
 }
